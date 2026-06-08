@@ -1,0 +1,21 @@
+DOSSIER PHOTOS DU RAPPORT ResTri
+=================================
+
+Glisse ici tes photos en les renommant EXACTEMENT comme ci-dessous.
+Le rapport les insérera automatiquement à la bonne place quand tu relances make_rapport.py.
+
+Formats acceptés : .jpg ou .png
+
+  vue_ensemble.jpg   -> Vue d'ensemble de la maquette (cadre bois + caméra + carrousel)
+  carrousel.jpg      -> Vue de dessus du carrousel à 4 bacs
+  breadboard.jpg     -> Carte Nucleo G431 sur la breadboard
+  dashboard.jpg      -> Capture d'écran du dashboard (détection en direct)
+  trappe.jpg         -> (optionnel) gros plan du servo de la trappe
+  alim.jpg           -> (optionnel) branchement de l'alimentation Métrix
+
+POUR LE PCB (Annexe B, quand Romels l'aura fait) :
+  pcb_schema.png     -> schéma Altium
+  pcb_routage.png    -> vue 2D du routage
+  pcb_3d.png         -> vue 3D de la carte
+
+Tu peux ajouter d'autres photos : envoie-moi leur nom et je les place.

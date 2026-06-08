@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResTri — Tri automatique de résistances</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+<body>
+  <header class="topbar" id="topbar">
+    <div class="brand-text">
+      <h1>ResTri</h1>
+      <span class="brand-sub">Tri automatique de résistances</span>
+    </div>
+    <div class="badges">
+      <span id="cam-badge"   class="badge"><i class="dot"></i>Caméra</span>
+      <span id="stm32-badge" class="badge"><i class="dot"></i>STM32</span>
+      <span id="ws-badge"    class="badge"><i class="dot"></i>Live</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- ───── Flux vidéo live ───── -->
+    <section class="card video-card">
+      <div class="card-head">
+        <h2>Flux caméra</h2>
+        <span class="tag tag-live"><i class="live-dot"></i>Live</span>
+      </div>
+      <div class="video-wrap">
+        <img id="video" src="{{ url_for('video_feed') }}" alt="flux vidéo">
+      </div>
+      <div class="video-actions">
+        <button id="btn-save" class="btn">Sauvegarder l'image</button>
+        <button id="btn-reset" class="btn btn-ghost">Réinitialiser les compteurs</button>
+      </div>
+    </section>
+
+    <!-- ───── Détection temps réel ───── -->
+    <section class="card data-card">
+      <div class="card-head"><h2>Détection en direct</h2></div>
+
+      <div class="value-box">
+        <div class="value" id="value">—</div>
+        <div class="bands" id="bands"></div>
+        <div class="category" id="category">En attente…</div>
+      </div>
+
+      <div class="conf-wrap">
+        <div class="conf-label"><span>Confiance IA</span><span id="conf-val">0%</span></div>
+        <div class="conf-bar"><div id="conf-fill" class="conf-fill"></div></div>
+      </div>
+    </section>
+
+    <!-- ───── Configuration des 4 bacs ───── -->
+    <section class="card counters-card">
+      <div class="card-head">
+        <h2>Bacs de tri</h2>
+        <span class="tag">4 bacs · 90°</span>
+      </div>
+      <div id="bins"></div>
+      <button id="btn-save-bins" class="btn btn-primary">Enregistrer la configuration</button>
+      <div class="total">Total trié <span id="cnt-total">0</span></div>
+      <p class="hint">Saisir une valeur par bac : <code>1k</code>, <code>10k</code>,
+        <code>470</code>, <code>4.7k</code>, <code>1M</code> … ou <code>rebut</code>
+        pour récupérer tout le reste.</p>
+    </section>
+
+    <!-- ───── Console STM32 ───── -->
+    <section class="card log-card">
+      <div class="card-head">
+        <h2>Console STM32</h2>
+        <span class="tag tag-mono">UART2 · 115200 bauds</span>
+      </div>
+      <pre id="stm32-log"></pre>
+    </section>
+  </main>
+
+  <footer class="foot">ResTri · Tri par vision — caméra → IA → carrousel servo</footer>
+
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($py = \\(Get-Command python -ErrorAction SilentlyContinue\\).Source; if \\(-not $py\\) { $py = \\(Get-Command py -ErrorAction SilentlyContinue\\).Source }; if \\($py\\) { & $py -m py_compile \"C:\\\\Users\\\\serin\\\\Downloads\\\\G431_base\\\\web\\\\app.py\" \"C:\\\\Users\\\\serin\\\\Downloads\\\\G431_base\\\\web\\\\vision.py\" \"C:\\\\Users\\\\serin\\\\Downloads\\\\G431_base\\\\web\\\\serial_link.py\" \"C:\\\\Users\\\\serin\\\\Downloads\\\\G431_base\\\\web\\\\test_serial.py\"; if \\($?\\) { \"SYNTAX OK \\($py\\)\" } } else { \"Python introuvable dans le PATH\" })",
+      "PowerShell(& \"C:\\\\Users\\\\serin\\\\AppData\\\\Local\\\\Microsoft\\\\WindowsApps\\\\python.exe\" -m py_compile \"C:\\\\Users\\\\serin\\\\Downloads\\\\G431_base\\\\web\\\\vision.py\" \"C:\\\\Users\\\\serin\\\\Downloads\\\\G431_base\\\\web\\\\app.py\")",
+      "PowerShell(if \\($?\\) { \"SYNTAX OK\" })",
+      "PowerShell($src = \"C:\\\\Users\\\\serin\\\\Downloads\\\\G431_base\\\\web\"; $zip = \"C:\\\\Users\\\\serin\\\\Downloads\\\\tri_resistances_web.zip\"; if \\(Test-Path $zip\\) { Remove-Item $zip -Force }; Compress-Archive -Path $src -DestinationPath $zip; if \\(Test-Path $zip\\) { \"ZIP cree : $zip\"; \"{0:N1} Ko\" -f \\(\\(Get-Item $zip\\).Length/1KB\\) })",
+      "PowerShell(Get-PSDrive C | Select-Object @{N='Libre_Go';E={[math]::Round\\($_.Free/1GB,2\\)}})"
+    ]
+  }
+}
