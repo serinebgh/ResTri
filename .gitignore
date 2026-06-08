@@ -1,0 +1,24 @@
+# ── Artefacts de compilation STM32CubeIDE (lourds, régénérés) ──
+G431_base/Debug/
+G431_base/Release/
+
+# ── Métadonnées de l'IDE / workspace ──
+.metadata/
+**/.settings/
+*.launch
+
+# ── Python ──
+web/__pycache__/
+**/__pycache__/
+*.pyc
+
+# ── Fichiers temporaires du projet ──
+web/_*.png
+web/_*.txt
+web/_applog.txt
+web/_apperr.txt
+web/_pcb_extract/
+
+# ── Divers ──
+Thumbs.db
+.DS_Store

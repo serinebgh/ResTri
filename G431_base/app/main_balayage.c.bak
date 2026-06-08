@@ -1,0 +1,96 @@
+#include "config.h"
+#include "stm32g4_sys.h"
+#include "stm32g4_systick.h"
+#include "stm32g4_gpio.h"
+#include "stm32g4_uart.h"
+#include "stm32g4_utils.h"
+#include "bsp_servo.h"
+#include <stdio.h>
+#include <stdbool.h>
+
+/* ============================================================
+ *  DECLENCHEMENT PERIODIQUE TOUTES LES 5 SECONDES
+ *
+ *  A chaque tick (5 s), les 3 servos basculent ensemble
+ *  vers leur position opposee. Mouvement de 50 deg pour
+ *  chaque servo (de 65 deg a 115 deg, centre sur 90 deg).
+ *
+ *  SERVO_1 (PA8)  : 65 deg <-> 115 deg   (rotation 50 deg)
+ *  SERVO_2 (PA9)  : 65 deg <-> 115 deg   (rotation 50 deg)
+ *  SERVO_3 (PA10) : 65 deg <-> 115 deg   (rotation 50 deg)
+ *
+ *  -> periode complete d'aller-retour = 10 s
+ *  -> un mouvement toutes les          = 5 s
+ *  La LED verte change d'etat a chaque tick.
+ * ============================================================ */
+#define PERIODE_MS      5000        /* 5 secondes entre chaque declenchement */
+
+#define ANGLE_CENTRE    90.0f
+#define ANGLE_AMPLI     60.0f       /* +/- 25 deg => 50 deg de rotation */
+
+#define POS_A           (ANGLE_CENTRE - ANGLE_AMPLI)  /* 65 deg  */
+#define POS_B           (ANGLE_CENTRE + ANGLE_AMPLI)  /* 115 deg */
+
+
+static void write_LED(bool b)
+{
+    HAL_GPIO_WritePin(LED_GREEN_GPIO, LED_GREEN_PIN, b);
+}
+
+
+int main(void)
+{
+    HAL_Init();
+    BSP_GPIO_enable();
+    BSP_UART_init(UART2_ID, 115200);
+    BSP_SYS_set_std_usart(UART2_ID, UART2_ID, UART2_ID);
+    BSP_GPIO_pin_config(LED_GREEN_GPIO, LED_GREEN_PIN,
+                        GPIO_MODE_OUTPUT_PP, GPIO_NOPULL,
+                        GPIO_SPEED_FREQ_HIGH, GPIO_NO_AF);
+
+    BSP_SERVO_init();
+
+    HAL_Delay(300);
+    printf("STM32:READY\r\n");
+    printf("Declenchement periodique toutes les %d ms\r\n", PERIODE_MS);
+    printf("Mouvement = 50 deg : %d deg <-> %d deg\r\n",
+           (int)POS_A, (int)POS_B);
+    printf("SERVO_1 (PA8), SERVO_2 (PA9), SERVO_3 (PA10)\r\n");
+
+    /* ---------- Position de depart (POS_A = 65 deg) ---------- */
+    BSP_SERVO_set_angle(SERVO_1, POS_A);
+    BSP_SERVO_set_angle(SERVO_2, POS_A);
+    BSP_SERVO_set_angle(SERVO_3, POS_A);
+    write_LED(false);
+    HAL_Delay(PERIODE_MS);
+
+    /* ============================================================
+     *  Boucle infinie : bascule toutes les 5 secondes
+     * ============================================================ */
+    uint32_t tick = 0;
+
+    while (1)
+    {
+        tick++;
+
+        /* ----- Position B : 115 deg ----- */
+        write_LED(true);
+        BSP_SERVO_set_angle(SERVO_1, POS_B);
+        BSP_SERVO_set_angle(SERVO_2, POS_B);
+        BSP_SERVO_set_angle(SERVO_3, POS_B);
+        printf("[tick %lu] -> POS_B : S1=S2=S3=%d deg\r\n",
+               (unsigned long)tick, (int)POS_B);
+        HAL_Delay(PERIODE_MS);
+
+        tick++;
+
+        /* ----- Position A : 65 deg ----- */
+        write_LED(false);
+        BSP_SERVO_set_angle(SERVO_1, POS_A);
+        BSP_SERVO_set_angle(SERVO_2, POS_A);
+        BSP_SERVO_set_angle(SERVO_3, POS_A);
+        printf("[tick %lu] -> POS_A : S1=S2=S3=%d deg\r\n",
+               (unsigned long)tick, (int)POS_A);
+        HAL_Delay(PERIODE_MS);
+    }
+}
