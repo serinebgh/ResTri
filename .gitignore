@@ -19,6 +19,11 @@ web/_applog.txt
 web/_apperr.txt
 web/_pcb_extract/
 
+# ── Secrets / lanceurs locaux (NE JAMAIS publier) ──
+web/lancer_dashboard.ps1
+**/*secret*
+**/.env
+
 # ── Divers ──
 Thumbs.db
 .DS_Store
